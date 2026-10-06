@@ -1,0 +1,8 @@
+# Tài khoản + phiên đăng nhập: KHÔNG đưa lên git
+taikhoan.json
+chrome_profile/
+
+# File sinh ra khi chạy
+run.log
+*.log
+__pycache__/
