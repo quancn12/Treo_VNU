@@ -1,5 +1,5 @@
 # Chạy bằng file chay.bat (tự cài thư viện, tự hỏi tài khoản lần đầu)
-# Đổi tài khoản: python abc.py --doi-tai-khoan
+# Đổi tài khoản: python treo_lms.py --doi-tai-khoan
 import base64
 import ctypes
 import getpass

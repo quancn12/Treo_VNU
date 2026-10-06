@@ -19,7 +19,7 @@ rem ===== Cai thu vien neu chua co =====
 %PY% -c "import selenium, webdriver_manager" >nul 2>nul
 if errorlevel 1 (
     echo Dang cai thu vien selenium, webdriver-manager...
-    %PY% -m pip install --upgrade selenium webdriver-manager
+    %PY% -m pip install --upgrade -r requirements.txt
     if errorlevel 1 (
         echo [LOI] Cai thu vien that bai.
         pause
@@ -34,7 +34,7 @@ if exist "taikhoan.json" (
     if errorlevel 2 set "ARGS=--doi-tai-khoan"
 )
 
-%PY% abc.py %ARGS%
+%PY% treo_lms.py %ARGS%
 
 echo.
 pause
