@@ -29,151 +29,92 @@ URL_MAC_DINH = "https://lms.vnu.edu.vn/learn/lop-hoc/chi-tiet/24f6bb01-cd62-49a9
 # ==========================================
 # CẤU HÌNH TÙY CHỌN & BUFFER THỜI GIAN
 # ==========================================
-# Thêm buffer 20 giây cho mỗi bài học để server LMS ghi nhận trọn vẹn heartbeat
+# Thêm buffer 20 giây cho mỗi bài học để server LMS ghi nhận trọn vẹn
 SAFETY_BUFFER_SECONDS = 20
 
-# Thời gian mở lướt đối với tài liệu PDF / Slide / Đề cương không yêu cầu phút
+# Bài KHÔNG bắt buộc (không có thời gian tối thiểu): chỉ cần mở qua là LMS tích xanh
+GIAY_BAI_KHONG_BAT_BUOC = 15
+
+# Dự phòng khi không đọc được API của LMS
 DEFAULT_PDF_SECONDS = 90
 
-# BẢNG TỪ ĐIỂN THỜI GIAN THEO TỪNG BÀI (Số phút tối thiểu quy định bởi LMS)
-COURSE_DURATIONS = {
-    # --- Mở đầu & Thông tin chung ---
-    "NHỮNG THÔNG TIN ĐẶC BIỆT QUAN TRỌNG CẦN ĐỌC": 2,
-    "KÊNH HỖ TRỢ KỸ THUẬT": 1,
-    "Lời chào và hướng dẫn tham gia học tập": 2,
-    "Video: Giới thiệu chung về học phần": 5,
-    "Video: Giới thiệu về cấu trúc học phần": 5,
-    "Video: Giới thiệu về đối tượng nghiên cứu": 5,
-    "Phiếu khảo sát trước khi bắt đầu học phần": 2,
+API_LMS = "https://lms.vnu.edu.vn/dhqg.lms.api/api/v1"
 
-    # --- Bài 1 ---
-    "1.1 Thông tin về bài học": 1,
-    "Video 1: Khái niệm, đặc trưng, vai trò của nhà nước": 10,
-    "Video 2: Nhà nước pháp quyền": 7,
-    "Video 3: Nhà nước pháp quyền XHCN Việt Nam": 10,
-    "Video 4: Xây dựng, hoàn thiện nhà nước pháp quyền XHCN Việt Nam": 5,
-    "Nhà nước pháp quyền XHCNVN - Những giá trị, đặc trưng": 2,
-    "Hoạt động 1: Thảo luận về nội dung bài học": 2,
-    "Hoạt động 2: Nhật ký học tập Bài 1": 1,
-
-    # --- Bài 2 ---
-    "2.1 Giới thiệu bài học": 1,
-    "Video 1: Khái niệm, đặc điểm bộ máy nhà nước": 5,
-    "Video 2: Bộ máy nhà nước CHXNCN Việt Nam": 18,
-    "Video 3. Các nguyên tắc tổ chức và hoạt động": 12,
-    "Video 4: Chức năng của nhà nước": 7,
-    "Video 5: Một số chức năng chủ yếu": 10,
-    "Bài đọc 1: Giải pháp nâng cao hiệu lực": 2,
-    "Bài đọc 2: Vai trò, chức năng của nhà nước": 2,
-    "Hoạt động 1: Nhật ký học tập Nội dung 1": 1,
-    "Video: Hình thức nhà nước Cộng hòa xã hội chủ nghĩa Việt Nam": 10,
-    "Bài đọc bắt buộc (PDF): Hình thức nhà nước đương đại": 2,
-    "Hoạt động 2: Nhật ký học tập Nội dung 2": 1,
-
-    # --- Bài 3 ---
-    "3.1 Giới thiệu bài học": 1,
-    "Video 1: Khái niệm và các thuộc tính cơ bản của pháp luật": 10,
-    "Video 2: Nguồn pháp luật, văn bản quy phạm pháp luật": 10,
-    "Video 3: Chức năng của pháp luật": 6,
-    "Bài đọc 1 (PDF): Giá trị của pháp luật": 2,
-    "Bài đọc 2 (PDF): Bàn về án lệ": 2,
-    "Bài đọc 3 (PDF): Mở rộng nguồn pháp luật": 2,
-    "Hoạt động 1: Thảo luận tình huống": 2,
-    "Hoạt động 2: Nhật ký học tập Bài 3": 1,
-
-    # --- Bài 4 ---
-    "4.1 Giới thiệu bài học": 1,
-    "Video 1: Quy phạm pháp luật": 4,
-    "Video 2: Quan hệ pháp luật": 7,
-    "Video 3: Thực hiện pháp luật": 4,
-    "Bài đọc 1 (PDF): Quan hệ pháp luật trong kỷ nguyên số": 2,
-    "Hoạt động 1: Thảo luận theo các nội dung": 2,
-    "Hoạt động 2: Nhật ký học tập bài 4": 1,
-
-    # --- Bài 5 ---
-    "5.1 Giới thiệu bài học": 1,
-    "Video 1: Ý thức pháp luật": 10,
-    "Video 2: Văn hoá pháp luật": 7,
-    "Video 3: Khái niệm và dấu hiệu của vi phạm pháp luật": 10,
-    "Video 4: Các yếu tố cấu thành vi phạm pháp luật": 5,
-    "Video 5: Phân loại vi phạm pháp luật": 3,
-    "Video 6: Trách nhiệm pháp lý": 5,
-    "Bài đọc 1: Vai trò của ý thức pháp luật": 2,
-    "Bài đọc 2: Ý thức pháp luật và xây dựng ý thức": 2,
-    "Bài đọc 3: Xã hội học vi phạm pháp luật": 2,
-    "Hoạt động 1: Thảo luận về nội dung bài học": 2,
-    "Hoạt động 2: Nhật ký học tập Bài 5": 1,
-
-    # --- Bài 6 ---
-    "Video 1: Luật dân sự": 5,
-    "Video 2: Luật tố tụng dân sự": 5,
-    "Video 3: Khái niệm, đối tượng và nguồn Luật Hiến pháp": 5,
-    "Video 4: Nội dung và chế định Luật Hiến pháp": 5,
-    "Video 5: Khái niệm, phương pháp và nguồn Luật hành chính": 5,
-    "Video 6: Tố tụng hành chính và Luật Tố tụng hành chính": 5,
-    "Video 7: Luật Hình sự - Những vấn đề chung": 5,
-    "Video 8: Luật Hình sự - Tội phạm, dấu hiệu tội phạm": 5,
-    "Video 9: Luật Hình sự - Các yếu tố cấu thành tội phạm": 5,
-    "Video 10: Luật Hình sự - Các giai đoạn phạm tội": 5,
-    "Video 11: Luật Hình sự - Hình phạt": 5,
-    "Video 12: Luật Tố tụng hình sự": 5,
-    "Bài đọc 1: Pháp luật dân sự và tố tụng dân sự": 2,
-    "Bài đọc 2: Bộ Luật hình sự năm 2015": 2,
-    "Bài đọc 3: Vai trò của Bộ Luật dân sự năm 2015": 2,
-}
+# Gọi API LMS bằng chính token đăng nhập đang lưu trong trình duyệt
+JS_GOI_API = """
+var cb = arguments[arguments.length - 1];
+fetch(arguments[0], {headers: {'Authorization': 'Bearer ' + localStorage.getItem('access_token')}})
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(cb).catch(function () { cb(null); });
+"""
 
 
-def xac_dinh_thoi_gian_hoc(name, extra_text=""):
+def doc_thong_tin_lop(driver, course_url):
     """
-    Chiến lược xác định thời gian 3 tầng:
-    1. Kiểm tra bài loại trừ: Trắc nghiệm (cần làm bài tính điểm), Zoom (trực tiếp).
-    2. Quét DOM động từ LMS (nếu hiển thị 'Phải học tối thiểu X phút').
-    3. Tra cứu từ điển môn học COURSE_DURATIONS.
-    4. Heuristic theo loại học liệu (Video, Bài đọc, PDF...).
+    Lấy từ API LMS thông tin TỪNG MỤC của lớp (dùng được cho mọi môn):
+      mincore    : số phút tối thiểu (với bài kiểm tra thì là điểm cần đạt)
+      isRequired : bài bắt buộc hay không
+      type.title : Video / Tệp tài liệu / Văn bản / Bài kiểm tra / Bài tập
+    Trả về dict: key "tên#thứ tự trùng tên" -> node, hoặc {} nếu lỗi.
+    """
+    m = re.search(r"chi-tiet/([0-9a-fA-F-]{36})", course_url)
+    if not m:
+        return {}
+    try:
+        driver.set_script_timeout(60)
+        res = driver.execute_async_script(JS_GOI_API, f"{API_LMS}/LmsClassContent/frGetByClassId/{m.group(1)}")
+    except Exception:
+        return {}
+    if not res or not isinstance(res.get("data"), list):
+        return {}
+
+    # Duyệt cây theo đúng thứ tự hiển thị (orderNum) để khớp thứ tự trên danh sách bài
+    ket_qua = {}
+    dem_trung = {}
+
+    def duyet(ds):
+        for node in sorted(ds, key=lambda n: n.get("orderNum") or 0):
+            if not node.get("isFolder"):
+                name = " ".join((node.get("title") or "").split())
+                dem_trung[name] = dem_trung.get(name, 0) + 1
+                ket_qua[f"{name}#{dem_trung[name]}"] = node
+            duyet(node.get("childrens") or [])
+
+    duyet(res["data"])
+    return ket_qua
+
+
+def xac_dinh_thoi_gian_hoc(name, info=None):
+    """
     Trả về: (tong_so_giay, mo_ta_ly_do, loai_bai)
-    loai_bai: 'NORMAL', 'QUIZ_SKIP', 'ZOOM_SKIP'
+    loai_bai: 'NORMAL', 'QUIZ_SKIP'
+    Ưu tiên dữ liệu từ API LMS (info); không có thì đoán theo tên bài.
     """
     name_clean = " ".join(name.split())
-    text_combined = f"{name_clean} {extra_text}".lower()
 
-    # 1. Kiểm tra bài kiểm tra / Trắc nghiệm / Bài tính điểm
-    # (không bắt chữ "kiểm tra" đơn lẻ: video "...trọng số kiểm tra, đánh giá" là bài thường)
-    if re.search(r"trắc nghiệm kiểm tra|kiểm tra trắc nghiệm|tính điểm|phải đạt\s+\d+\s*\(?điểm\)?", text_combined):
-        return 0, "Trắc nghiệm / Kiểm tra (Yêu cầu làm bài đạt điểm - Bỏ qua)", "QUIZ_SKIP"
+    if info:
+        loai = ((info.get("type") or {}).get("title") or "").lower()
+        if "kiểm tra" in loai or "bài tập" in loai:
+            return 0, f"{(info.get('type') or {}).get('title')} - phải tự làm", "QUIZ_SKIP"
+        mincore = info.get("mincore")
+        if info.get("isRequired") and mincore:
+            secs = int(float(mincore) * 60) + SAFETY_BUFFER_SECONDS
+            return secs, f"LMS yêu cầu tối thiểu {mincore} phút (+{SAFETY_BUFFER_SECONDS}s buffer)", "NORMAL"
+        return GIAY_BAI_KHONG_BAT_BUOC, f"Bài không bắt buộc - mở qua {GIAY_BAI_KHONG_BAT_BUOC}s", "NORMAL"
 
-    # 2. Kiểm tra Buổi học trực tiếp Zoom
-    if re.search(r"\(zoom\)|buổi học trực tiếp", text_combined):
-        return 0, "Buổi học trực tiếp Zoom (Bỏ qua)", "ZOOM_SKIP"
-
-    # 3. Tầng 1: Đọc trực tiếp từ giao diện LMS nếu có text 'Phải học tối thiểu X (phút)'
-    match_phut = re.search(r"tối thiểu\s+(\d+(?:\.\d+)?)\s*\(?phút\)?", text_combined)
-    if match_phut:
-        mins = float(match_phut.group(1))
-        secs = int(mins * 60) + SAFETY_BUFFER_SECONDS
-        return secs, f"Đọc từ LMS: {mins} phút (+{SAFETY_BUFFER_SECONDS}s buffer)", "NORMAL"
-
-    # 4. Tầng 2: Tra từ điển COURSE_DURATIONS
-    for key, mins in COURSE_DURATIONS.items():
-        if key.lower() in name_clean.lower() or name_clean.lower() in key.lower():
-            secs = int(mins * 60) + SAFETY_BUFFER_SECONDS
-            return secs, f"Khớp từ điển: {mins} phút (+{SAFETY_BUFFER_SECONDS}s buffer)", "NORMAL"
-
-    # 5. Tầng 3: Heuristic dự phòng thông minh
+    # ----- Dự phòng: không có dữ liệu API -----
     name_lower = name_clean.lower()
+    if re.search(r"trắc nghiệm kiểm tra|kiểm tra trắc nghiệm|tính điểm|phải đạt\s+\d+\s*\(?điểm\)?", name_lower):
+        return 0, "Trắc nghiệm / bài tính điểm - phải tự làm", "QUIZ_SKIP"
     if "video" in name_lower:
-        mins = 5
-        return int(mins * 60) + SAFETY_BUFFER_SECONDS, f"Heuristic Video: {mins} phút (+{SAFETY_BUFFER_SECONDS}s buffer)", "NORMAL"
-    elif any(k in name_lower for k in ["bài đọc", "thảo luận", "khảo sát"]):
-        mins = 2
-        return int(mins * 60) + SAFETY_BUFFER_SECONDS, f"Heuristic Bài đọc/Thảo luận: {mins} phút (+{SAFETY_BUFFER_SECONDS}s buffer)", "NORMAL"
-    elif any(k in name_lower for k in ["thông tin", "nhật ký", "reflection"]):
-        mins = 1
-        return int(mins * 60) + SAFETY_BUFFER_SECONDS, f"Heuristic Thông tin/Nhật ký: {mins} phút (+{SAFETY_BUFFER_SECONDS}s buffer)", "NORMAL"
-    elif any(k in name_lower for k in ["pdf", "tài liệu", "đề cương", "giáo trình", "học liệu", "hướng dẫn", "danh mục"]):
-        return DEFAULT_PDF_SECONDS, f"Tài liệu/PDF đọc nhanh: {DEFAULT_PDF_SECONDS}s", "NORMAL"
-
-    # Mặc định an toàn cho các mục chưa rõ
-    return 90, "Mặc định: 1.5 phút (90s)", "NORMAL"
+        return 5 * 60 + SAFETY_BUFFER_SECONDS, "Dự phòng Video: 5 phút (hoặc theo độ dài video)", "NORMAL"
+    if any(k in name_lower for k in ["bài đọc", "thảo luận", "khảo sát"]):
+        return 2 * 60 + SAFETY_BUFFER_SECONDS, "Dự phòng Bài đọc/Thảo luận: 2 phút", "NORMAL"
+    if any(k in name_lower for k in ["thông tin", "nhật ký", "reflection"]):
+        return 1 * 60 + SAFETY_BUFFER_SECONDS, "Dự phòng Thông tin/Nhật ký: 1 phút", "NORMAL"
+    if any(k in name_lower for k in ["pdf", "tài liệu", "đề cương", "giáo trình", "học liệu", "hướng dẫn", "danh mục"]):
+        return DEFAULT_PDF_SECONDS, f"Dự phòng Tài liệu/PDF: {DEFAULT_PDF_SECONDS}s", "NORMAL"
+    return 90, "Dự phòng mặc định: 90s", "NORMAL"
 
 
 JS_DANH_SACH_BAI = """
@@ -193,25 +134,18 @@ for (var i = 0; i < vids.length; i++) {
 
 
 def doc_danh_sach_bai(driver):
-    """Trả về list (key, name, class) — key = tên + số thứ tự trùng tên,
-    vì có bài trùng tên ở các chương khác nhau (vd 'Hoạt động 1: Thảo luận...')."""
+    """Trả về list (vi_tri, key, name, class) — key = tên + số thứ tự trùng tên,
+    vì có bài trùng tên ở các chương khác nhau (vd 'Hoạt động 1: Thảo luận...').
+    vi_tri = chỉ số trong querySelectorAll để bấm; bỏ qua mục rỗng (danh sách phụ của giao diện)."""
     ket_qua = []
     dem_trung = {}
-    for class_str, raw_text in driver.execute_script(JS_DANH_SACH_BAI):
-        name = " ".join(raw_text.split()) if raw_text else "Bài học không có tên"
+    for vi_tri, (class_str, raw_text) in enumerate(driver.execute_script(JS_DANH_SACH_BAI)):
+        name = " ".join((raw_text or "").split())
+        if not name:
+            continue
         dem_trung[name] = dem_trung.get(name, 0) + 1
-        ket_qua.append((f"{name}#{dem_trung[name]}", name, class_str or ""))
+        ket_qua.append((vi_tri, f"{name}#{dem_trung[name]}", name, class_str or ""))
     return ket_qua
-
-
-def da_hoan_thanh(driver, key):
-    try:
-        for k, _, class_str in doc_danh_sach_bai(driver):
-            if k == key:
-                return "ico-img-status-3" in class_str
-    except Exception:
-        pass
-    return False
 
 
 def bai_bi_khoa(driver):
@@ -240,20 +174,49 @@ def thoi_luong_video(driver):
     return 0
 
 
-def dem_nguoc(driver, tong_so_giay, ten_bai, key):
+def hop_thoai_dang_hoc(driver):
+    """LMS định kỳ hỏi 'Bạn có đang học tập không?' — không bấm trong 10s là bị đá về trang chủ."""
+    try:
+        return driver.execute_script("""
+            var p = document.querySelector('.swal2-popup');
+            return !!(p && p.offsetParent !== null && /đang học/i.test(p.textContent));
+        """)
+    except Exception:
+        return False
+
+
+def dem_nguoc(driver, tong_so_giay, ten_bai):
     """
-    Đếm ngược thời gian trực quan theo phút:giây, giữ video luôn phát,
-    và kết thúc sớm ngay khi LMS đánh dấu tích xanh cho bài.
+    Đếm ngược thời gian trực quan theo phút:giây, giữ video luôn phát.
+    (LMS chỉ lưu thời gian học khi RỜI khỏi bài nên không chờ tích xanh ở đây.)
+    Trả về False nếu bị LMS đá khỏi bài (không trả lời hộp thoại 'đang học').
     """
     start_time = time.time()
     last_interaction = start_time
-    last_check = start_time
 
     while True:
         elapsed = time.time() - start_time
         remaining = int(tong_so_giay - elapsed)
         if remaining <= 0:
             break
+
+        # Hộp thoại "Bạn có đang học tập không?" -> báo người dùng tự bấm
+        if hop_thoai_dang_hoc(driver):
+            print("\n   🔔 LMS HỎI 'Bạn có đang học tập không?' -> BẤM 'CÓ' TRÊN CHROME TRONG 10 GIÂY!")
+            for _ in range(10):
+                if not hop_thoai_dang_hoc(driver):
+                    break
+                try:
+                    import winsound
+                    winsound.Beep(1200, 300)
+                except Exception:
+                    print("\a", end="", flush=True)
+                time.sleep(0.7)
+
+        # Bị đá khỏi lớp (không ai bấm 'Có') -> thời gian không được tính
+        if "/learn/lop-hoc/" not in driver.current_url:
+            print(f"\n   ⚠️ BỊ LMS ĐÁ KHỎI BÀI vì không trả lời hộp thoại -> treo lại: {ten_bai[:45]}")
+            return False
 
         try:
             driver.execute_script(JS_PHAT_VIDEO)
@@ -268,13 +231,6 @@ def dem_nguoc(driver, tong_so_giay, ten_bai, key):
                 pass
             last_interaction = time.time()
 
-        # Mỗi 10 giây xem LMS đã tích xanh chưa -> xong sớm thì chuyển bài luôn
-        if time.time() - last_check >= 10:
-            last_check = time.time()
-            if da_hoan_thanh(driver, key):
-                print(f"\n   ✅ LMS ĐÃ TÍCH XANH: {ten_bai[:50]}")
-                return True
-
         m_rem = remaining // 60
         s_rem = remaining % 60
         m_tot = tong_so_giay // 60
@@ -282,10 +238,40 @@ def dem_nguoc(driver, tong_so_giay, ten_bai, key):
         print(f"   ⏳ [TREO MÁY] Còn {m_rem:02d}:{s_rem:02d} / {m_tot:02d}:{s_tot:02d} | {ten_bai[:45]}...", end="\r", flush=True)
         time.sleep(1)
 
-    time.sleep(3)
-    xong = da_hoan_thanh(driver, key)
-    print(f"\n   {'✅ ĐÃ XONG' if xong else '⚠️ HẾT GIỜ NHƯNG LMS CHƯA TÍCH XANH'}: {ten_bai[:50]}")
-    return xong
+    print(f"\n   ⏱️ ĐỦ GIỜ: {ten_bai[:50]}")
+    return True
+
+
+def doc_bai_da_xong(driver, course_url):
+    """Tập id các mục LMS đã ghi nhận hoàn thành (isFinish) — chính xác hơn icon trên giao diện."""
+    m = re.search(r"chi-tiet/([0-9a-fA-F-]{36})", course_url)
+    if not m:
+        return set()
+    try:
+        res = driver.execute_async_script(JS_GOI_API, f"{API_LMS}/LmsClass/FrUserJoinClassNew/{m.group(1)}")
+        ds = ((res or {}).get("data") or {}).get("listClassUserLearning") or []
+        return {x["classContentId"] for x in ds if x.get("isFinish")}
+    except Exception:
+        return set()
+
+
+def roi_khoi_bai(driver, vi_tri_hien_tai):
+    """Bấm sang 1 bài đã xong khác để LMS lưu thời gian học của bài vừa treo."""
+    try:
+        driver.execute_script("""
+            var ds = document.querySelectorAll('div.__lesson-status'), cur = arguments[0];
+            var dich = -1;
+            for (var i = 0; i < ds.length; i++) {
+                var a = ds[i].parentElement.querySelector('a');
+                if (i == cur || !a || !a.textContent.trim()) continue;
+                if (ds[i].className.indexOf('ico-img-status-3') >= 0) { dich = i; break; }
+                if (dich < 0) dich = i;  // lớp mới chưa có bài nào xong: bấm tạm bài khác
+            }
+            if (dich >= 0) ds[dich].parentElement.querySelector('a').click();
+        """, vi_tri_hien_tai)
+        time.sleep(5)
+    except Exception:
+        pass
 
 
 # ==========================================
@@ -457,6 +443,16 @@ if __name__ == "__main__":
     dang_nhap(driver, tai_khoan)
     cho_danh_sach_bai(driver, tai_khoan["course_url"])
 
+    # Đọc thời gian tối thiểu / loại bài của TỪNG MỤC từ API LMS (dùng cho mọi môn)
+    thong_tin = doc_thong_tin_lop(driver, tai_khoan["course_url"])
+    if thong_tin:
+        bat_buoc = [n for n in thong_tin.values() if n.get("isRequired") and n.get("mincore")
+                    and "kiểm tra" not in ((n.get("type") or {}).get("title") or "").lower()]
+        print(f"📋 Đọc được {len(thong_tin)} mục từ LMS: {len(bat_buoc)} bài bắt buộc có thời gian tối thiểu "
+              f"(tổng {sum(float(n['mincore']) for n in bat_buoc):.0f} phút)")
+    else:
+        print("⚠️ Không đọc được thông tin lớp từ LMS, dùng thời gian dự phòng theo tên bài.")
+
     # Bộ nhớ phiên (theo key = tên + số thứ tự trùng tên)
     so_lan_thu = {}        # key -> số lần đã treo
     bo_qua = {}            # key -> (tên bài, lý do) : không xử lý nữa trong lần chạy này
@@ -488,11 +484,12 @@ if __name__ == "__main__":
         print("🔄 ĐANG QUÉT TOÀN BỘ DANH SÁCH BÀI HỌC VÀ TRẠNG THÁI...")
 
         danh_sach = doc_danh_sach_bai(driver)
+        da_xong_api = doc_bai_da_xong(driver, tai_khoan["course_url"]) if thong_tin else set()
         so_hoan_thanh = 0
         danh_sach_chua_xong = []
 
-        for vi_tri, (key, name, class_str) in enumerate(danh_sach):
-            if "ico-img-status-3" in class_str:
+        for vi_tri, key, name, class_str in danh_sach:
+            if "ico-img-status-3" in class_str or (thong_tin.get(key) or {}).get("id") in da_xong_api:
                 so_hoan_thanh += 1
             elif key not in bo_qua:
                 danh_sach_chua_xong.append({"vi_tri": vi_tri, "key": key, "name": name})
@@ -515,17 +512,13 @@ if __name__ == "__main__":
         key = muc_tieu["key"]
 
         # Phân tích thời gian và phân loại bài
-        so_giay, ly_do, loai_bai = xac_dinh_thoi_gian_hoc(ten_bai)
+        info = thong_tin.get(key)
+        so_giay, ly_do, loai_bai = xac_dinh_thoi_gian_hoc(ten_bai, info)
 
-        # Nếu là trắc nghiệm hoặc Zoom, bỏ qua ngay
+        # Bài kiểm tra / bài tập: bỏ qua, cuối cùng báo để tự làm
         if loai_bai == "QUIZ_SKIP":
-            print(f"\n⏭️ [BỎ QUA TRẮC NGHIỆM] {ten_bai}")
-            bo_qua[key] = (ten_bai, "Trắc nghiệm / bài tính điểm - phải tự làm")
-            continue
-
-        if loai_bai == "ZOOM_SKIP":
-            print(f"\n⏭️ [BỎ QUA ZOOM] {ten_bai}")
-            bo_qua[key] = (ten_bai, "Buổi học Zoom - phải tự tham gia")
+            print(f"\n⏭️ [BỎ QUA] {ten_bai} ({ly_do})")
+            bo_qua[key] = (ten_bai, ly_do)
             continue
 
         if so_lan_thu.get(key, 0) >= MAX_LAN_THU:
@@ -554,13 +547,18 @@ if __name__ == "__main__":
             bo_qua[key] = (ten_bai, f"Bị khoá, cần hoàn thành trước: {ds_chan}")
             continue
 
-        # Có video -> treo ít nhất bằng độ dài video
-        dur = thoi_luong_video(driver)
-        if dur and dur + SAFETY_BUFFER_SECONDS > so_giay:
-            so_giay = dur + SAFETY_BUFFER_SECONDS
-            ly_do = f"Theo độ dài video: {dur // 60}:{dur % 60:02d} (+{SAFETY_BUFFER_SECONDS}s buffer)"
+        # Không có dữ liệu LMS mà bài có video -> treo theo độ dài video
+        if not info:
+            dur = thoi_luong_video(driver)
+            if dur and dur + SAFETY_BUFFER_SECONDS > so_giay:
+                so_giay = dur + SAFETY_BUFFER_SECONDS
+                ly_do = f"Theo độ dài video: {dur // 60}:{dur % 60:02d} (+{SAFETY_BUFFER_SECONDS}s buffer)"
         print(f"   📊 Căn cứ thời gian: {ly_do}")
 
-        so_lan_thu[key] = so_lan_thu.get(key, 0) + 1
-        dem_nguoc(driver, so_giay, ten_bai, key)
-        print("🔄 Chuyển sang bài tiếp theo...\n")
+        if dem_nguoc(driver, so_giay, ten_bai):
+            so_lan_thu[key] = so_lan_thu.get(key, 0) + 1
+            roi_khoi_bai(driver, muc_tieu["vi_tri"])
+            print("🔄 Chuyển sang bài tiếp theo...\n")
+        else:
+            driver.get(tai_khoan["course_url"])
+            cho_danh_sach_bai(driver, tai_khoan["course_url"])
