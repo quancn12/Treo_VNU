@@ -33,19 +33,36 @@ if not defined CHROME (
 )
 echo [OK] Chrome: %CHROME%
 
-rem ===== 3. Thu vien Python: chua co thi tu cai =====
-"%PY%" -c "import selenium, webdriver_manager" >nul 2>nul
+rem ===== 3. Moi truong rieng .venv: khong dung toi Python/Conda cua may =====
+set "VENV=%~dp0.venv"
+set "VPY=%VENV%\Scripts\python.exe"
+rem venv hong (vd Python goc da bi go) -> tao lai
+if exist "%VPY%" (
+    "%VPY%" -c "" >nul 2>nul
+    if errorlevel 1 rmdir /s /q "%VENV%"
+)
+if not exist "%VPY%" (
+    echo [*] Tao moi truong rieng .venv ^(chi lan dau^)...
+    "%PY%" -m venv "%VENV%"
+    if errorlevel 1 (
+        echo [LOI] Khong tao duoc .venv.
+        pause
+        exit /b 1
+    )
+)
+rem Chi cai thu vien khi .venv moi tao hoac requirements.txt thay doi
+fc /b "requirements.txt" "%VENV%\.da_cai.txt" >nul 2>nul
 if errorlevel 1 (
-    echo [*] Dang cai thu vien selenium, webdriver-manager...
-    "%PY%" -m pip install --upgrade -r requirements.txt
-    "%PY%" -c "import selenium, webdriver_manager" >nul 2>nul
+    echo [*] Dang cai thu vien vao .venv...
+    "%VPY%" -m pip install --disable-pip-version-check -q --upgrade -r requirements.txt
     if errorlevel 1 (
         echo [LOI] Cai thu vien that bai. Kiem tra mang roi chay lai.
         pause
         exit /b 1
     )
+    copy /y "requirements.txt" "%VENV%\.da_cai.txt" >nul
 )
-echo [OK] Thu vien da du.
+echo [OK] Moi truong .venv san sang.
 echo.
 
 rem ===== 4. Da co tai khoan: cho 5 giay de chon doi tai khoan =====
@@ -55,7 +72,7 @@ if exist "taikhoan.json" (
     if errorlevel 2 set "ARGS=--doi-tai-khoan"
 )
 
-"%PY%" treo_lms.py %ARGS%
+"%VPY%" treo_lms.py %ARGS%
 
 echo.
 pause

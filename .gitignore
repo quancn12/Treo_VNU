@@ -6,3 +6,6 @@ chrome_profile/
 run.log
 *.log
 __pycache__/
+
+# Moi truong Python rieng do chay.bat tao
+.venv/

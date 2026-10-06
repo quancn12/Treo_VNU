@@ -11,9 +11,7 @@ import sys
 import time
 from ctypes import wintypes
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
-from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -449,11 +447,12 @@ if __name__ == "__main__":
     options.add_argument(f"--user-data-dir={THU_MUC_PROFILE}")
     options.add_argument("--hide-crash-restore-bubble")
 
-    # Nếu Chrome của bạn cài ở vị trí lạ, hãy bỏ comment dòng dưới và trỏ đúng đường dẫn
-    # options.binary_location = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
+    # chay.bat truyền đường dẫn Chrome tìm được qua biến CHROME
+    if os.environ.get("CHROME") and os.path.exists(os.environ["CHROME"]):
+        options.binary_location = os.environ["CHROME"]
 
-    service = Service(ChromeDriverManager().install())
-    driver = webdriver.Chrome(service=service, options=options)
+    # Selenium Manager (có sẵn trong selenium >= 4.11) tự tải ChromeDriver khớp phiên bản Chrome
+    driver = webdriver.Chrome(options=options)
 
     dang_nhap(driver, tai_khoan)
     cho_danh_sach_bai(driver, tai_khoan["course_url"])
